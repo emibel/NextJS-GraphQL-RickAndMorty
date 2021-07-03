@@ -7,7 +7,7 @@ import Locations from "../components/location/locations";
 import SearchField from "../components/generics/searchField";
 import { SEARCH_LOCATIONS } from '../lib/queries';
 
-import useSearchLocations from './index.hook';
+import useSearchLocations from '../hooks/index.hook';
 
 const IndexPage = (results) => {
   const intialState = results;
