@@ -3,7 +3,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "../lib/apolloClient";
 
-import AppLayout from '../components/AppLayout'
+import AppLayout from '../components/appLayout'
 
 function MyApp({ Component, pageProps }) {
   const client = useApollo(pageProps.initialApolloState);
