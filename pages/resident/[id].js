@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Button, Avatar, Stack, GridItem, Grid, Divider } from "@chakra-ui/react";
 
 import { initializeApollo } from '../../lib/apolloClient';
-import { GET_RESIDENT } from '../../lib/queries'
+import { GET_RESIDENT, GET_RESIDENTS } from '../../lib/queries'
 import LabelField from '../../components/generics/labelField'
 
 const ResidentPage = ({ resident }) => (
@@ -36,7 +36,18 @@ const ResidentPage = ({ resident }) => (
   </Stack>
 )
 
-export async function getServerSideProps({ params }) {
+
+export const getStaticPaths = async () => {
+  const apolloClient = initializeApollo()
+  const { data } = await apolloClient.query({ query: GET_RESIDENTS })
+  const paths = data.characters.results.map(character => ({
+    params: { id: character.id },
+  }))
+
+  return { paths, fallback: true }
+}
+
+export async function getStaticProps({ params }) {
   const queryId = params.id;
   const apolloClient = initializeApollo()
   const { data } = await apolloClient.query({ query: GET_RESIDENT, variables: { id: queryId } })
