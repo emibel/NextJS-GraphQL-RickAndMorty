@@ -5,7 +5,7 @@ import { IconButton, Divider, Stack } from "@chakra-ui/react";
 import { initializeApollo } from '../lib/apolloClient';
 import Locations from "../components/location/locations";
 import SearchField from "../components/generics/searchField";
-import { SEARCH_LOCATIONS } from '../lib/queries';
+import { SEARCH_LOCATIONS } from '../lib/locationQueries';
 
 import useSearchLocations from '../hooks/index.hook';
 

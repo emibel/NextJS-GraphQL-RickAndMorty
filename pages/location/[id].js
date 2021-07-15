@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { initializeApollo } from '../../lib/apolloClient';
 import { Heading, Divider, Stack, Button } from "@chakra-ui/react";
 
-import { GET_LOCATION, GET_RESIDENTS_COUNT, SEARCH_LOCATIONS } from '../../lib/queries'
+import { GET_RESIDENTS_COUNT } from '../../lib/residentsQueries'
+import { GET_LOCATIONS_PAGES, GET_LOCATIONS_BY_PAGE, GET_LOCATION } from '../../lib/locationQueries'
 import LabelField from '../../components/generics/labelField';
 import Residents from '../../components/location/residents';
 import LocationStats from '../../components/location/locationStats';
@@ -31,13 +32,19 @@ const LocationPage = ({ location, residentsCount }) => (
 export const getStaticPaths = async () => {
 
   const apolloClient = initializeApollo()
-  const { data } = await apolloClient.query({ query: SEARCH_LOCATIONS })
+  const { data: pagesData } = await apolloClient.query({ query: GET_LOCATIONS_PAGES })
 
-  const paths = data.locations.results.map(location => ({
-    params: { id: location.id },
-  }))
+  const locationsP = [];
+  for (let page = 1; page < pagesData.locations.info.pages; page++) {
+    locationsP.push(apolloClient.query({ query: GET_LOCATIONS_BY_PAGE, variables: { page } } ));
+  }
 
-  return { paths, fallback: true }
+  const locationsPages = await Promise.all(locationsP);
+  const locationsPagesIds = [].concat(...locationsPages.map(page => page.data.locations.results.map( result => result.id )))
+  
+  const paths = locationsPagesIds.map( id => ({ params: { id: id }} ))
+
+  return { paths, fallback: false }
 }
 
 

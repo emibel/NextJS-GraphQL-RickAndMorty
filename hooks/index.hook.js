@@ -1,4 +1,4 @@
-import { SEARCH_LOCATIONS } from '../lib/queries';
+import { SEARCH_LOCATIONS } from '../lib/locationQueries';
 import { initializeApollo } from '../lib/apolloClient';
 import { useToast } from "@chakra-ui/react";
 

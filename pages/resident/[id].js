@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Button, Avatar, Stack, GridItem, Grid, Divider } from "@chakra-ui/react";
 
 import { initializeApollo } from '../../lib/apolloClient';
-import { GET_RESIDENT, GET_RESIDENTS } from '../../lib/queries'
+import { GET_RESIDENT, GET_RESIDENTS_BY_PAGE, GET_RESIDENTS_PAGES } from '../../lib/residentsQueries'
 import LabelField from '../../components/generics/labelField'
 
 const ResidentPage = ({ resident }) => (
@@ -39,12 +39,21 @@ const ResidentPage = ({ resident }) => (
 
 export const getStaticPaths = async () => {
   const apolloClient = initializeApollo()
-  const { data } = await apolloClient.query({ query: GET_RESIDENTS })
-  const paths = data.characters.results.map(character => ({
-    params: { id: character.id },
-  }))
+  const { data: pagesData } = await apolloClient.query({ query: GET_RESIDENTS_PAGES })
+  console.log(pagesData.characters.info.pages)
 
-  return { paths, fallback: true }
+  const residentsP = [];
+  for (let page = 1; page < pagesData.characters.info.pages; page++) {
+    residentsP.push(apolloClient.query({ query: GET_RESIDENTS_BY_PAGE, variables: { page } } ));
+  }
+
+  const residentsPages = await Promise.all(residentsP);
+  const residentsPagesIds = [].concat(...residentsPages.map(page => page.data.characters.results.map( result => result.id )))
+  
+  const paths = residentsPagesIds.map( id => ({ params: { id: id }} ))
+
+  return { paths, fallback: false }
+
 }
 
 export async function getStaticProps({ params }) {
