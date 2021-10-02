@@ -9,7 +9,7 @@ const ResidentPage = ({ resident }) => (
   <Stack direction="column">
     <Stack direction="row" spacing={4} p={8} align="center" justify="center">
       <Link href={`/`}>
-        <a><Button colorScheme="teal" variant="link">Search Locations</Button></a>
+        <a><Button colorScheme="teal" variant="link">Search</Button></a>
       </Link>
 
       <Link href={`/location/[id]`} as={`/location/${resident.location.id}`}>
