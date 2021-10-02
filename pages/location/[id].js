@@ -12,7 +12,7 @@ const LocationPage = ({ location, residentsCount }) => (
   <div>
     <Stack direction="column" p={4} align="center">
       <Link href={`/`}>
-        <a><Button colorScheme="teal" variant="link">Search Locations</Button></a>
+        <a><Button colorScheme="teal" variant="link">Search localidades</Button></a>
       </Link>
       <Divider />
       <Heading as="h3" size="lg" p={4}> {`Location: ${location.name}`} </Heading>
